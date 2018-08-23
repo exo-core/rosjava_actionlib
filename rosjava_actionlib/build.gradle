@@ -18,6 +18,9 @@
 apply plugin: 'application'
 mainClassName = 'org.ros.RosRun'
 
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
 /*
  Dependencies can be on external maven artifacts (such as rosjava_core
  here) or on sibling subprojects. Fpr external maven artifact dependencies

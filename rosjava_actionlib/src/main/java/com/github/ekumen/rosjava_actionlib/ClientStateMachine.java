@@ -439,7 +439,7 @@ public class ClientStateMachine {
    * @return True if the goal can be cancelled, false otherwise.
    */
   public boolean cancel() {
-    ArrayList<Integer> cancellableStates = new ArrayList<>(Arrays.asList(ClientStates.WAITING_FOR_GOAL_ACK,
+    ArrayList<Integer> cancellableStates = new ArrayList<Integer>(Arrays.asList(ClientStates.WAITING_FOR_GOAL_ACK,
         ClientStates.PENDING, ClientStates.ACTIVE));
     boolean shouldCancel = cancellableStates.contains(state);
 
