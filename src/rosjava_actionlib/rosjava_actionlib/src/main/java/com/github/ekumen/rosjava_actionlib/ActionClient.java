@@ -103,7 +103,7 @@ public class ActionClient<T_ACTION_GOAL extends Message,
     */
   public void sendGoal(T_ACTION_GOAL agMessage, String id) {
     GoalID gid = getGoalId(agMessage);
-    if (id == "") {
+    if (id.equals("")) {
       goalIdGenerator.generateID(gid);
     } else {
       gid.setId(id);
@@ -293,9 +293,10 @@ public class ActionClient<T_ACTION_GOAL extends Message,
     if (gstat != null) {
       // update the goal status tracking
       goalManager.updateStatus(gstat.getStatus());
-    } else {
-      log.info("Status update is not for our goal!");
     }
+    // else {
+    //   log.info("Status update is not for our goal!");
+    // }
     // Propagate the callback
     if (callbackTarget != null) {
       callbackTarget.statusReceived(message);
