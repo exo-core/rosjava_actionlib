@@ -2,5 +2,14 @@ devel/
 build/
 .gradle/
 *.*~
-src/CMakeLists.txt
 .catkin_workspace
+
+# Java build artifacts class files
+*.class
+
+# other generated files
+bin/
+gen/
+build/
+
+rosjava_actionlib/bin
