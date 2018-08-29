@@ -35,7 +35,7 @@ public class ServerStateMachine {
 
   private int state;
 
-  ServerStateMachine() {
+  public ServerStateMachine() {
     // Initial state
     state = GoalStatus.PENDING;
   }
