@@ -315,6 +315,17 @@ public class ActionServer<T_ACTION_GOAL extends Message,
   }
 
   /**
+   * Express a aborted event for this goal. The state of the goal will be updated.
+   */
+  public void setAborted(String goalIdString) {
+    try {
+      goalTracker.get(goalIdString).state.transition(ServerStateMachine.Events.ABORT);
+    }
+    catch (Exception e) {
+    }
+  }
+
+  /**
    * Set goal ID and state information to the goal status message.
    * @param gstat GoalStatus message.
    * @param gidString String identifying the goal.
