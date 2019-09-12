@@ -151,6 +151,10 @@ public class ActionServer<T_ACTION_GOAL extends Message,
      * Stop publishing the action server topics.
      */
     private void unpublishServer() {
+        // Stop the task run by the Timer.
+	    statusTick.cancel();
+	    statusTick.purge();
+
         if (statusPublisher != null) {
             statusPublisher.shutdown(5, TimeUnit.SECONDS);
             statusPublisher = null;
