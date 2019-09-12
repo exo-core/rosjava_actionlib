@@ -274,22 +274,6 @@ public class ActionServer<T_ACTION_GOAL extends Message,
             goalStatusList.add(goalStatus);
         }
 
-        /* Collection<ServerGoal> serverGoals = goalTracker.values();
-
-        for (Iterator<ServerGoal> it = serverGoals.iterator(); it.hasNext();) {
-            ServerGoal sg = it.next();
-            goalStatus = node.getTopicMessageFactory().newFromType(GoalStatus._TYPE);
-            goalStatus.setGoalId(getGoalId(sg.goal));
-            goalStatus.setStatus((byte) sg.state.getState());
-            goalStatusList.add(goalStatus);
-        } */
-
-        /* for (ServerGoal sg : goalTracker.values()) {
-            goalStatus = node.getTopicMessageFactory().newFromType(GoalStatus._TYPE);
-            goalStatus.setGoalId(getGoalId(sg.goal));
-            goalStatus.setStatus((byte) sg.state.getState());
-            goalStatusList.add(goalStatus);
-        } */
         status.setStatusList(goalStatusList);
         sendStatus(status);
     }
