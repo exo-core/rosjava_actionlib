@@ -27,13 +27,17 @@ import org.ros.node.topic.Subscriber;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Class to encapsulate the actiolib server's communication and goal management.
+ * Class to encapsulate the actionlib server's communication and goal management.
  *
  * @author Ernesto Corbellini ecorbellini@ekumenlabs.com
  */
@@ -64,8 +68,9 @@ public class ActionServer<T_ACTION_GOAL extends Message,
     private String actionName;
     private ActionServerListener callbackTarget = null;
     private Timer statusTick = new Timer();
-    private HashMap<String, ServerGoal> goalTracker = new HashMap<String,
-            ServerGoal>(1);
+    private ConcurrentHashMap<String,ServerGoal> goalTracker = new ConcurrentHashMap<String,ServerGoal>(1);
+    //private HashMap<String, ServerGoal> goalTracker = new HashMap<String,
+    //        ServerGoal>(1);
 
     /**
      * Constructor.
@@ -151,9 +156,9 @@ public class ActionServer<T_ACTION_GOAL extends Message,
      * Stop publishing the action server topics.
      */
     private void unpublishServer() {
-        // Stop the task run by the Timer.
-	    statusTick.cancel();
-	    statusTick.purge();
+        // stop the task run by the Timer.
+        statusTick.cancel();
+        statusTick.purge();
 
         if (statusPublisher != null) {
             statusPublisher.shutdown(5, TimeUnit.SECONDS);
@@ -259,12 +264,32 @@ public class ActionServer<T_ACTION_GOAL extends Message,
         GoalStatus goalStatus;
         Vector<GoalStatus> goalStatusList = new Vector<GoalStatus>();
 
-        for (ServerGoal sg : goalTracker.values()) {
+        Iterator it = goalTracker.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            ServerGoal sg = (ServerGoal) pair.getValue();
             goalStatus = node.getTopicMessageFactory().newFromType(GoalStatus._TYPE);
             goalStatus.setGoalId(getGoalId(sg.goal));
             goalStatus.setStatus((byte) sg.state.getState());
             goalStatusList.add(goalStatus);
         }
+
+        /* Collection<ServerGoal> serverGoals = goalTracker.values();
+
+        for (Iterator<ServerGoal> it = serverGoals.iterator(); it.hasNext();) {
+            ServerGoal sg = it.next();
+            goalStatus = node.getTopicMessageFactory().newFromType(GoalStatus._TYPE);
+            goalStatus.setGoalId(getGoalId(sg.goal));
+            goalStatus.setStatus((byte) sg.state.getState());
+            goalStatusList.add(goalStatus);
+        } */
+
+        /* for (ServerGoal sg : goalTracker.values()) {
+            goalStatus = node.getTopicMessageFactory().newFromType(GoalStatus._TYPE);
+            goalStatus.setGoalId(getGoalId(sg.goal));
+            goalStatus.setStatus((byte) sg.state.getState());
+            goalStatusList.add(goalStatus);
+        } */
         status.setStatusList(goalStatusList);
         sendStatus(status);
     }
